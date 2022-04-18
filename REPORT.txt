@@ -1,0 +1,21 @@
+
+(1) Did this one solo
+
+(2) The video posted was very helpful. My outputs for part1 match what was discussed there. 
+    Both of my output files match the size of the input files, as expected.
+    Dr. Silvestro mentioned a page fault value x, 3000 < x < 3500 for part 2. My page fault value is in this range.
+
+(3) I hope that my hashes match! I was not sure how to explicitly hash binary files 
+
+(4) I enjoyed working on the LRU/page replacement algorithms. I did not have time to finish the extra credit, but
+    this would be a great project to work on after the due date (I will implement EC and possibly try to make this
+    something that can be seen visually by the user.)
+
+(5)
+    Part 1 output hash: 
+    e13d74f0b0a05aecbbca7fa800cc83e5
+
+    Part 2 output hash:
+    79f5d05db54a6e23aba4ac008700adff
+
+    Part 2 page faults: 3186

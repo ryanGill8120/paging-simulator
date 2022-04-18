@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 #include "pagetable.h"
 #include "phypages.h"
 
@@ -6,6 +7,7 @@
 #define OFFSET_SIZE 7
 #define BYTES_PER_PAGE 128
 
+//initializes the page table with an array of structs and sets all valid bits to 0
 page_table* initPageTable(){
     
     int i;
@@ -26,22 +28,30 @@ int processPageEntry(unsigned long input, page_table* pageTable, unsigned int* r
     offset = input & (BYTES_PER_PAGE - 1);            //drop all values >= 2^7
 
     if (pageTable[(int) pageNumber].validBit == 1){
-        //page hit
+
+        //page hit, get frame number and set reference counter
         physicalFrame = ((unsigned long) pageTable[pageNumber].frameNumber) << OFFSET_SIZE;
         pageTable[pageNumber].referenceCount = (*referenceCount)++;
+
     }else{
         //page fault
-        pageFault = 1;
+        pageFault = 1;   //function increments var in caller to output page faults
+
+
         if ((frameNumber = getFreeFrames()) > 0){
             //during cold start
+
+            //set valid bit and get frameNumber as next freeframe
             pageTable[pageNumber].validBit = 1;
             pageTable[pageNumber].frameNumber = frameNumber;
             pageTable[pageNumber].referenceCount = (*referenceCount)++;
             physicalFrame = ((unsigned long) frameNumber) << OFFSET_SIZE;
-            removeFreeFrame();
+            removeFreeFrame(); //mark another free frame as used
         }else{
             // use LRU
             pageTable[pageNumber].validBit = 1;
+
+            //traverse to find minimum reference (LRU) and index/position of the stolen frame
             for (i = 0; i < MAX_PAGE_TABLE_SIZE; i++){
                 if (pageTable[i].validBit == 1 && pageTable[i].referenceCount < min){
                     min = pageTable[i].referenceCount;
